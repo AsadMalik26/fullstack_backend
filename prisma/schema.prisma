@@ -1,0 +1,35 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// schema.prisma
+
+// Define the Product model
+model Product {
+  id          Int      @id @default(autoincrement())
+  name        String
+  price       Float
+  createdAt   DateTime @default(now())
+  rating      Int?     @default(0) // Rating is optional
+  description String? // Description is optional
+  // Add the opposite relation field on the User model
+  users       User[]
+}
+
+// Define the User model
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String
+  productId Int
+  product   Product  @relation(fields: [productId], references: [id])
+  createdAt DateTime @default(now())
+}
